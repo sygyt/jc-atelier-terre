@@ -1,62 +1,163 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Galerie de l'artiste</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: #f8f8f8;
-      margin: 0;
-      padding: 0;
-    }
-    h1 {
-      text-align: center;
-      padding: 1em;
-    }
-    .gallery {
-      column-count: 3;
-      column-gap: 1em;
-      margin: 1em;
-    }
-    .gallery img {
-      width: 100%;
-      margin-bottom: 1em;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      break-inside: avoid;
-    }
-    @media (max-width: 768px) {
-      .gallery { column-count: 2; }
-    }
-    @media (max-width: 480px) {
-      .gallery { column-count: 1; }
-    }
-  </style>
-</head>
-<body>
-  <h1>Galerie de l'artiste</h1>
-  <div class="gallery" id="gallery"></div>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>JC Atelier Terre</title>
+<style>
+  /* Polices Google Fonts - exemple avec Playfair Display et Montserrat */
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display&family=Montserrat&display=swap');
 
-  <script>
-    async function fetchImages() {
-    try {
-      const response = await fetch("https://script.google.com/macros/s/AKfycbwbU67V0ipvDcwxAkAla6q0hpAdS_U_PEKcRDW0A-8cGN4veS84zMhYUecHt-48Hh8oMA/exec");
-      const imageUrls = await response.json();
+  /* Reset basique */
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
 
-      const gallery = document.getElementById("gallery");
-      imageUrls.forEach((url) => {
-        const img = document.createElement("img");
-        img.src = url;
-        img.alt = "";
-        gallery.appendChild(img);
-      });
-    } catch (error) {
-      console.error("Erreur lors du chargement des images :", error);
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #faf9f6;
+    color: #3e3a33;
+    line-height: 1.6;
+  }
+
+  header {
+    background-color: #6c4f3d;
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  section.intro {
+    padding: 40px 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  /* Galerie masonry */
+  #gallery {
+    column-count: 3;
+    column-gap: 20px;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+
+  @media (max-width: 900px) {
+    #gallery {
+      column-count: 2;
+    }
+  }
+  @media (max-width: 600px) {
+    #gallery {
+      column-count: 1;
     }
   }
 
-  fetchImages();
-  </script>
+  .photo {
+    break-inside: avoid;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    overflow: hidden;
+    background: white;
+    cursor: zoom-in;
+    transition: transform 0.3s ease;
+  }
+
+  .photo img {
+    width: 100%;
+    display: block;
+    height: auto;
+  }
+
+  .photo:hover {
+    transform: scale(1.03);
+  }
+
+  /* Contact */
+  section.contact {
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 20px;
+    text-align: center;
+    font-size: 1rem;
+    color: #6c4f3d;
+  }
+
+  section.contact a {
+    color: #6c4f3d;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  section.contact a:hover {
+    text-decoration: underline;
+  }
+
+  /* Footer */
+  footer {
+    background-color: #6c4f3d;
+    color: white;
+    text-align: center;
+    padding: 15px 10px;
+    font-size: 0.9rem;
+  }
+</style>
+</head>
+<body>
+
+<header>JC Atelier Terre</header>
+
+<section class="intro">
+  <p>Atelier de poterie et sculpture artisanale. Créations uniques en terre cuite et grès.</p>
+</section>
+
+<section id="gallery">
+  <!-- Galerie chargée dynamiquement -->
+</section>
+
+<section class="contact">
+  <p>Contact : <a href="mailto:contact@jc-atelier-terre.fr">contact@jc-atelier-terre.fr</a></p>
+  <p>Téléphone : 06 12 34 56 78</p>
+</section>
+
+<footer>
+  © 2025 JC Atelier Terre - Tous droits réservés
+</footer>
+
+<script>
+  // URL de ton script Google Apps Script renvoyant le JSON des URLs images
+  const IMAGES_API_URL = 'https://script.google.com/macros/s/AKfycbwbU67V0ipvDcwxAkAla6q0hpAdS_U_PEKcRDW0A-8cGN4veS84zMhYUecHt-48Hh8oMA/exec';
+
+  async function loadGallery() {
+    try {
+      const res = await fetch(IMAGES_API_URL);
+      if (!res.ok) throw new Error('Erreur réseau');
+      const images = await res.json();
+
+      const gallery = document.getElementById('gallery');
+      images.forEach(url => {
+        const div = document.createElement('div');
+        div.className = 'photo';
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = "Photo JC Atelier Terre";
+        div.appendChild(img);
+        gallery.appendChild(div);
+      });
+    } catch (e) {
+      console.error('Erreur chargement galerie:', e);
+      document.getElementById('gallery').textContent = 'Erreur lors du chargement des images.';
+    }
+  }
+
+  loadGallery();
+</script>
+
 </body>
 </html>
