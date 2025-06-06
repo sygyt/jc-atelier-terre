@@ -39,19 +39,24 @@
   <div class="gallery" id="gallery"></div>
 
   <script>
-    const JSON_URL = "https://script.google.com/macros/s/AKfycbxnmmrYPSIOo-1VPIEBr_4wpE4kLP-FY9WI9lxrDWaW-v284EjDpOFQvOFF9MkpNsK7CQ/exec";
+    async function fetchImages() {
+    try {
+      const response = await fetch("https://script.google.com/macros/s/AKfycbxnmmrYPSIOo-1VPIEBr_4wpE4kLP-FY9WI9lxrDWaW-v284EjDpOFQvOFF9MkpNsK7CQ/exec");
+      const imageUrls = await response.json();
 
-    fetch(JSON_URL)
-      .then(res => res.json())
-      .then(images => {
-        const gallery = document.getElementById('gallery');
-        images.forEach(url => {
-          const img = document.createElement('img');
-          img.src = url;
-          gallery.appendChild(img);
-        });
-      })
-      .catch(err => console.error("Erreur de chargement des images:", err));
+      const gallery = document.getElementById("gallery");
+      imageUrls.forEach((url) => {
+        const img = document.createElement("img");
+        img.src = url;
+        img.alt = "";
+        gallery.appendChild(img);
+      });
+    } catch (error) {
+      console.error("Erreur lors du chargement des images :", error);
+    }
+  }
+
+  fetchImages();
   </script>
 </body>
 </html>
