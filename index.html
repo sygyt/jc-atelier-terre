@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Galerie de l'artiste</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f8f8f8;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      text-align: center;
+      padding: 1em;
+    }
+    .gallery {
+      column-count: 3;
+      column-gap: 1em;
+      margin: 1em;
+    }
+    .gallery img {
+      width: 100%;
+      margin-bottom: 1em;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      break-inside: avoid;
+    }
+    @media (max-width: 768px) {
+      .gallery { column-count: 2; }
+    }
+    @media (max-width: 480px) {
+      .gallery { column-count: 1; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Galerie de l'artiste</h1>
+  <div class="gallery" id="gallery"></div>
+
+  <script>
+    const JSON_URL = "https://script.google.com/macros/s/AKfycbxL8I004Qx7A-ScrutOwXjtLP5NIA_uEdae0wwUYiYQwO-MLk99TvcrJOPQzowqwtOclw/exec";
+
+    fetch(JSON_URL)
+      .then(res => res.json())
+      .then(images => {
+        const gallery = document.getElementById('gallery');
+        images.forEach(url => {
+          const img = document.createElement('img');
+          img.src = url;
+          gallery.appendChild(img);
+        });
+      })
+      .catch(err => console.error("Erreur de chargement des images:", err));
+  </script>
+</body>
+</html>
